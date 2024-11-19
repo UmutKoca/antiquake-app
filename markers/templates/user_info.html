@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+  .form-field {
+    @apply relative transition-all duration-200;
+  }
+  .form-field input, .form-field select {
+    @apply w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200;
+  }
+  .form-field label {
+    @apply block mb-2 text-sm font-medium text-gray-700;
+  }
+  .animate-fade {
+    animation: fadeIn 0.5s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-[calc(100vh-3.5rem)] bg-gradient-to-br from-base-100 to-base-200 flex items-center justify-center p-4">
+  <div class="max-w-md w-full">
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden animate-fade">
+      <!-- Header -->
+      <div class="bg-primary/5 px-6 py-6 text-center border-b border-gray-100">
+        <h2 class="text-2xl font-bold text-gray-800">Hoş Geldiniz!</h2>
+        <p class="text-gray-600 mt-2">Haritaya işaretleme yapmadan önce aşağıdaki bilgileri doldurabilir misiniz?</p>
+      </div>
+
+      <!-- Form -->
+      <div class="p-6 space-y-4">
+        <form method="post">
+          {% csrf_token %}
+
+          <!-- Kullanıcı Adı -->
+          <div class="form-field">
+            <label class="block text-sm font-medium text-gray-700 mt-2 mb-2" for="{{ form.username.id_for_label }}">{{ form.username.label }}:</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+              <p class="text-red-500 text-xs mt-1 ml-1">{{ form.username.errors }}:</p>
+            {% endif %}
+          </div>
+
+          <!-- Yaş -->
+          <div class="form-field">
+            <label class="block text-sm font-medium text-gray-700 mt-2 mb-2" for="{{ form.age.id_for_label }}">{{ form.age.label }}:</label>
+            {{ form.age }}
+            {% if form.age.errors %}
+              <p class="text-red-500 text-xs mt-1 ml-1">{{ form.age.errors }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Cinsiyet -->
+          <div class="form-field">
+            <label class="block text-sm font-medium text-gray-700 mt-2 mb-2" for="{{ form.gender.id_for_label }}">{{ form.gender.label }}:</label>
+            {{ form.gender }}
+            {% if form.gender.errors %}
+              <p class="text-red-500 text-xs mt-1 ml-1">{{ form.gender.errors }}</p>
+            {% endif %}
+          </div>
+
+          <!-- İlişki -->
+          <div class="form-field">
+            <label class="block text-sm font-medium text-gray-700 mt-2 mb-2" for="{{ form.relationship.id_for_label }}">{{ form.relationship.label }}:</label>
+            {{ form.relationship }}
+            {% if form.relationship.errors %}
+              <p class="text-red-500 text-xs mt-1 ml-1">{{ form.relationship.errors }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Submit Button -->
+          <div class="mt-6">
+            <button type="submit" class="w-full bg-primary text-white py-3 px-4 rounded-lg hover:bg-primary-focus focus:outline-none focus:ring-4 focus:ring-primary/20 transform transition-all duration-200 flex items-center justify-center">
+              <span>Devam Et</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="px-6 py-4 bg-gray-50 text-center">
+        <p class="text-sm text-gray-500">
+          Bilgileriniz gizlilik politikamız kapsamında korunmaktadır.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

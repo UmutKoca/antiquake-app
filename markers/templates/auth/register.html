@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="h-[calc(100vh-4rem)] grid place-items-center bg-gradient-to-br from-blue-50 to-gray-100 overflow-hidden">
+  <div class="w-full max-w-sm mx-auto px-4 sm:px-0">
+    <div class="bg-white rounded-xl shadow-lg p-6 transform transition duration-500 hover:shadow-2xl">
+      <h2 class="text-2xl font-bold text-center text-gray-900 mb-6">Kaydol</h2>
+      
+      {% if messages %}
+        {% for message in messages %}
+          <div class="mb-6 bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg flex items-center" role="alert">
+            <svg class="h-5 w-5 text-red-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            <p class="text-sm font-medium">{{ message }}</p>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700" for="{{ field.id_for_label }}">
+            {{ field.label }}
+          </label>
+          
+          <div class="flex items-center bg-gray-50 rounded-lg border border-gray-300 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 transition duration-200">
+            {% if field.name == 'username' %}
+            <svg class="h-5 w-5 text-gray-400 mx-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+            </svg>
+            {% elif field.name == 'email' %}
+            <svg class="h-5 w-5 text-gray-400 mx-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+            </svg>
+            {% else %}
+            <svg class="h-5 w-5 text-gray-400 mx-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+            </svg>
+            {% endif %}
+            
+            {{ field }}
+          </div>
+          
+          {% if field.errors %}
+          {% for error in field.errors %}
+          <p class="text-xs text-red-600">{{ error }}</p>
+          {% endfor %}
+          {% endif %}
+          
+          {% if field.help_text %}
+          <p class="text-xs text-gray-500">{{ field.help_text }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+        
+        <button type="submit" 
+                class="w-full flex justify-center py-3 px-4 rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 font-medium">
+          Kaydol
+        </button>
+        
+        <div class="text-center text-sm">
+          <p class="text-gray-600">
+            Zaten hesabınız var mı?
+            <a href="{% url 'login' %}" class="text-blue-600 hover:text-blue-700 font-medium ml-1">
+              Giriş Yap
+            </a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+/* HTML ve Body tam yükseklik alır */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Haritanın tam ekran görünümü */
+#map {
+    height: 100vh;
+    /* Ekranın tam yüksekliğini al */
+    width: 100vw;
+    /* Ekranın tam genişliğini al */
+}
+
+/* Panelin haritanın üzerinde görünmesi */
+#info-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Ortaya yerleştir */
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    /* Haritanın üstünde görünmesi için */
+    width: 80vw;
+    /* 300px yerine 80vw */
+    max-width: 400px;
+    /* Geniş ekranlarda 400px'i geçmesin */
+    /* Panelin genişliği */
+    display: none;
+    /* Başlangıçta gizli */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /* Gölgelendirme */
+    border-radius: 8px;
+    /* Köşeleri yuvarlaştır */
+}
+
+/* Panel başlığı ve kapatma butonu stili */
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Form stil ayarları */
+#info-panel form {
+    display: flex;
+    flex-direction: column;
+}
+
+#info-panel label {
+    margin-bottom: 5px;
+}
+
+#info-panel textarea,
+#info-panel input {
+    margin-bottom: 10px;
+}

@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Antiquake Map{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'map.css' %}" />
+    <link href="https://unpkg.com/maplibre-gl@^4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link href="https://cdn.maptiler.com/maptiler-geocoding-control/v1.3.3/style.css" rel="stylesheet">
+{% endblock %}
+
+{% block extra_head %}
+    <script src="https://unpkg.com/maplibre-gl@^4.7.1/dist/maplibre-gl.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.maptiler.com/maptiler-geocoding-control/v1.3.3/maplibregl.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="map" class="h-screen"></div>
+    
+    <!-- Form Panel -->
+    <div id="info-panel" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-base-100 shadow-2xl rounded-2xl p-8 hidden z-10 w-[95%] max-w-2xl">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-2xl font-bold">Yeni Risk Ekle</h2>
+            </div>
+            <button id="close-panel" class="btn btn-circle btn-ghost btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <form id="dataForm" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            
+            <!-- Description Field -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text font-medium">Riski tanımlayın:</span>
+                </label>
+                <textarea id="description" name="description" class="textarea textarea-bordered h-24" placeholder="Riski tanımlayın..." required></textarea>
+            </div>
+
+            <!-- Photo Upload Field -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text font-medium">Fotoğraf</span>
+                </label>
+                <label for="photo" class="cursor-pointer">
+                    <div class="border-2 border-dashed border-base-300 rounded-box p-6 text-center hover:border-primary transition-colors" id="dropZone">
+                        <div class="space-y-3" id="uploadArea">
+                            <div class="avatar placeholder mx-auto">
+                                <div class="bg-base-200 text-base-content rounded-full w-12">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <p class="text-sm opacity-60">Sürükleyip bırakın veya tıklayın</p>
+                        </div>
+
+                        <!-- Preview Area -->
+                        <div id="previewArea" class="hidden">
+                            <div class="flex flex-col items-center">
+                                <div class="relative w-20 h-20 mx-auto flex items-center justify-center">
+                                    <img id="previewImg" src="" alt="Önizleme" class="h-20 rounded object-contain">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input id="photo" name="photo" type="file" accept="image/*" class="hidden">
+                </label>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="modal-action mt-8 pt-4 border-t">
+                <button type="button" id="cancel-button" class="btn btn-ghost">İptal</button>
+                <button type="submit" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                    Kaydet
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Display Panel -->
+    <div id="display-panel" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-base-100 shadow-2xl rounded-2xl p-6 hidden z-10 w-[95%] max-w-md">
+        <div class="flex justify-between items-center mb-4">
+            <h2 id="username-display" class="text-lg font-semibold"></h2>
+            <button id="close-display-panel" class="btn btn-circle btn-ghost btn-sm">✕</button>
+        </div>
+        <div id="description-display" class="mb-6 opacity-75 text-sm"></div>
+        <div class="w-full rounded-box bg-base-200 overflow-hidden">
+            <img id="image-display" src="" alt="Risk Fotoğrafı" class="w-full h-auto object-contain" />
+        </div>
+        <div class="flex justify-end mt-6">
+            <div id="date-display" class="text-xs bg-base-200 px-3 py-1.5 rounded-lg text-base-content/60"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        const kuzguncukGeojsonUrl = "{% static 'geojson/kuzguncuk.geojson' %}";
+        const MAPTILER_API_KEY = "{{ maptiler_api_key }}";
+    </script>
+    <script defer src="{% static 'map.js' %}"></script>
+{% endblock %}

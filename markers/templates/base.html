@@ -1,0 +1,39 @@
+<!-- base.html -->
+{% load tailwind_tags %}
+<!DOCTYPE html>
+<html lang="tr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Antiquake{% endblock %}</title>
+    {% tailwind_css %}
+    {% block extra_css %}{% endblock %}
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen flex flex-col">
+    <nav class="bg-white shadow-md py-2 px-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Sol taraf: Antiquake logo yazısı -->
+            <div class="flex items-center">
+                <a href="{% url 'user_info' %}" class="text-lg font-semibold tracking-tight">
+                    Antiquake
+                </a>
+            </div>
+            <!-- Sağ taraf: Hoşgeldiniz, kullanıcı adı -->
+            <div class="flex items-center space-x-6">
+                {% if user_info.username %}
+                    <span class="text-sm text-gray-700 px-3">Hoşgeldin, {{ user_info.username }}</span>
+                    <a href="{% url 'logout' %}" class="text-sm px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors">
+                        Çıkış Yap
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    {% block content %}{% endblock %}
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
