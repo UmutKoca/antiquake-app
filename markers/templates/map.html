@@ -5,17 +5,17 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'map.css' %}" />
-    <link href="https://unpkg.com/maplibre-gl@^4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'vendor/maplibre-gl.css' %}" />
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <link href="https://cdn.maptiler.com/maptiler-geocoding-control/v1.3.3/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'vendor/toastify.css' %}" />
+    <link rel="stylesheet" href="{% static 'vendor/maptiler-geocoding.css' %}" />
 {% endblock %}
 
 {% block extra_head %}
-    <script src="https://unpkg.com/maplibre-gl@^4.7.1/dist/maplibre-gl.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script src="https://cdn.maptiler.com/maptiler-geocoding-control/v1.3.3/maplibregl.umd.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
+    <script src="{% static 'vendor/maplibre-gl.js' %}"></script>
+    <script src="{% static 'vendor/toastify.js' %}"></script>
+    <script src="{% static 'vendor/maptiler-geocoding.js' %}"></script>
+    <script src="{% static 'vendor/turf.min.js' %}"></script>
 {% endblock %}
 
 {% block content %}
