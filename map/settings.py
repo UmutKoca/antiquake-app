@@ -10,8 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
 import os, platform
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_)-42xam)u_f6-9n%u*-)7%ao1=u3w6mx4%qb2yf$$-7d@n++a'
+SECRET_KEY = os.getenv('SECRET_KEY', 'your-default-secret-key-for-development')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -84,12 +89,12 @@ WSGI_APPLICATION = 'map.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',  # GeoDjango için PostGIS kullanımı
-        'NAME': 'antiquakepublic',                          # Veritabanı adını buraya yaz
-        'USER': 'postgres',                               # PostgreSQL kullanıcı adı
-        'PASSWORD': 'umut',                           # PostgreSQL şifresi
-        'HOST': 'localhost',                                   # Veritabanı sunucusu (genellikle localhost)
-        'PORT': '5432',                                       # PostgreSQL varsayılan portu
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': os.getenv('DB_NAME', 'antiquakepublic'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -160,7 +165,7 @@ elif platform.system() == 'Darwin':  # macOS
 else:  # Linux ve diğer sistemler
     NPM_BIN_PATH = "/usr/bin/npm"
 
-MAPTILER_API_KEY = "ggI3Ajm9jPu0lhcyhMwg"
+MAPTILER_API_KEY = os.getenv('MAPTILER_API_KEY', '')
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
