@@ -1,22 +1,29 @@
-# Antiquake App
+# Antiquake Risk Avcıları
 
-Antiquake App, İstanbul'daki tarihi yapıların deprem riski altındaki durumlarını haritalandırmak ve bu yapıların durumlarını takip etmek için geliştirilmiş bir web uygulamasıdır.
+Antiquake Risk Avcıları, Üsküdar Kuzguncuk Mahallesi'nde deprem risklerini haritalandırmak ve mahalle sakinlerinin katılımıyla risk verilerini toplamak için geliştirilmiş bir web uygulamasıdır.
 
 ## Özellikler
 
-- Harita üzerinde tarihi yapıların konumlarını görüntüleme
-- Yapıların detaylı bilgilerini kaydetme ve görüntüleme
-- Kullanıcı kayıt ve giriş sistemi
-- Yapıların durumlarını güncelleme ve takip etme
-- Bölge sınırlarını görüntüleme
+- İnteraktif risk haritası üzerinde:
+  - Risk noktalarını işaretleme
+  - Fotoğraf ve açıklama ekleme
+  - Mevcut risk noktalarını görüntüleme
+  - Adres arama ve konuma gitme
+- Kullanıcı yönetimi:
+  - Kayıt ve giriş sistemi
+  - Demografik bilgi toplama
+- Kuzguncuk mahalle sınırlarını görüntüleme
+- Coğrafi konumlu veri toplama
 
 ## Teknolojiler
 
-- Python 3.8+
-- Django 4.2
-- PostgreSQL
-- Leaflet.js
-- Tailwind CSS
+- Python 3.x
+- Django 5.1
+- Django REST Framework
+- PostgreSQL + PostGIS
+- MapLibre GL JS
+- MapTiler
+- Tailwind CSS + DaisyUI
 
 ## Kurulum
 
@@ -40,12 +47,25 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Veritabanı migrasyonlarını yapın:
+4. .env dosyasını oluşturun:
+```bash
+cp .env.example .env
+```
+Ve gerekli ortam değişkenlerini ayarlayın (MapTiler API anahtarı vb.)
+
+5. PostgreSQL veritabanını oluşturun ve PostGIS eklentisini ekleyin:
+```sql
+CREATE DATABASE antiquake;
+\c antiquake
+CREATE EXTENSION postgis;
+```
+
+6. Veritabanı migrasyonlarını yapın:
 ```bash
 python manage.py migrate
 ```
 
-5. Geliştirme sunucusunu başlatın:
+7. Geliştirme sunucusunu başlatın:
 ```bash
 python manage.py runserver
 ```
@@ -62,4 +82,4 @@ Uygulama http://localhost:8000 adresinde çalışmaya başlayacaktır.
 
 ## Lisans
 
-Bu proje MIT lisansı altında lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakın.
+Bu proje GNU General Public License v3.0 (GPL-3.0) lisansı altında lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakın.
